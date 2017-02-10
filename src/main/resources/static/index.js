@@ -13,13 +13,14 @@ $(function () {
     var $fileNames = $("#file-names");
     var $toggleGenerateLog = $('#toggle-generate-log');
     var $logMessage = $('#log-message');
+    var $logArea = $("#log-area");
 
     $dir.val('c:/temp');
 
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
         stompClient.subscribe('/topic/appendMessage', function (message) {
-            $("#log-area").append("<tr><td>" + message.body + "</td></tr>");
+            $logArea.append($('<p></p>').text(message.body));
         });
         stompClient.subscribe('/topic/sendFileNames', function (message) {
             var options = [];
@@ -31,19 +32,21 @@ $(function () {
             $fileNames.append(options);
         });
         stompClient.subscribe('/topic/appendLog', function (message) {
-            $("#log-area").append(message.body + '\n');
+            var $p = $('<p></p>').text(message.body);
+            $logArea.append($p);
             if(!$('#pause-auto-scroll').prop('checked')) $(window).scrollTop($(document).height());
+            var useFilter = $('#use-filter').prop('checked');
+            if(!useFilter) return;
+            handleFilter($p);
         });
         stompClient.subscribe('/topic/sendInitialDir', function (message) {
             $dir.val(message.body);
         });
-
         $dir.change(function(){
             stompClient.send("/app/dir_change", {}, JSON.stringify({dir: $dir.val()}));
         }).change();
-
         $fileNames.change(function(){
-            $("#log-area").empty();
+            $logArea.empty();
             stompClient.send("/app/filename_change", {}, JSON.stringify({
                 dir: $dir.val(),
                 fileName: $fileNames.val()
@@ -64,5 +67,19 @@ $(function () {
                 }));
             }
         });
+        $('#use-filter').change(function(){
+            $logArea.find('p').show();
+            var useFilter = $('#use-filter').prop('checked');
+            if(!useFilter) return;
+            $logArea.find('p').each(function(){
+                handleFilter($(this));
+            });
+        });
+
+        function handleFilter($p) {
+            var text = $p.text();
+            var regExp = new RegExp($('#filter-condition').val());
+            if(!regExp.test(text)) $p.hide();
+        }
     });
 });

@@ -6,6 +6,9 @@
     <script src="/webjars/sockjs-client/sockjs.min.js"></script>
     <script src="/webjars/stomp-websocket/stomp.min.js"></script>
     <script src="index.js"></script>
+    <style>
+        p { margin: 0; padding: 0}
+    </style>
 </head>
 <body>
 <div>
@@ -29,9 +32,15 @@
             <button id="append-custom-log">append-custom-log</button>
             <button id="append-custom-log-100">append-custom-log-100</button>
         </div>
+        <div>
+            <label for="use-filter">use-filter</label>
+            <input id="use-filter" type="checkbox"/>
+            <label for="filter-condition"></label>
+            <input id="filter-condition" type="text"/>
+        </div>
         <hr/>
     </div>
-    <pre id="log-area" style="margin-top: 120px;"></pre>
+    <pre id="log-area" style="margin-top: 130px;"></pre>
 </div>
 </body>
 </html>

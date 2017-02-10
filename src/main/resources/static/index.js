@@ -75,6 +75,9 @@ $(function () {
                 handleFilter($(this));
             });
         });
+        $('#filter-condition').change(function(){
+            $('#use-filter').change();
+        });
 
         function handleFilter($p) {
             var text = $p.text();

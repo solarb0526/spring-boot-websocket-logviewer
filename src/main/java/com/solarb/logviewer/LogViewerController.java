@@ -35,7 +35,7 @@ public class LogViewerController {
                 try {
                     Thread.sleep(1000);
                     if(!generateLog) continue;
-                    logger.info("generated log. currentTimeMillis: " + System.currentTimeMillis());
+                    logger.info("generated log. Math.random(): " + Math.random());
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

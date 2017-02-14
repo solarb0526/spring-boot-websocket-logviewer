@@ -67,6 +67,9 @@ $(function () {
                 }));
             }
         });
+        $('#clear-log').click(function(){
+            $logArea.empty();
+        });
         $('#use-filter').change(function(){
             $logArea.find('p').show();
             var useFilter = $('#use-filter').prop('checked');
